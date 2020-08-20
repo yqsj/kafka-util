@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+    <!--若干个appender的定义-->
+    <!--org.apache.log4j.ConsoleAppender 输出到控制台-->
+    <appender name="ConsoleOutput" class="org.apache.log4j.ConsoleAppender">
+        <!--输出格式-->
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-d{yyyy-MM-dd HH:mm:ss,SSS} [%c]-[%p] %m%n"/>
+        </layout>
+    </appender>
+    <!--org.apache.log4j.DailyRollingFileAppender 每天产生一个日志文件-->
+    <appender name="myFile" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="C:\\com\\yiqi\\platform\\power-manager\\output.log"/><!--文件位置-->
+        <param name="Append" value="true"/><!--是否选择追加-->
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="%-d{yyyy-MM-dd HH:mm:ss,SSS} [%c]-[%p] %m%n"/>
+        </layout>
+    </appender>
+
+
+    <!--org.apache.log4j.RollingFileAppender 滚动日志文件输出 文件大小到达一定尺寸时重新产生新的文件-->
+    <!--<appender name="myFile" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="D:/output.log" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="500KB"/>
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%p (%c:%L)- %m%n" />
+        </layout>
+    </appender>-->
+
+    <!--将各个包中的类日志输出到不同的日志文件中
+        这样可以便于日志的分类。
+        可以通过这个设置，把业务逻辑的日志添加到数据库。起到过滤的作用
+    -->
+    <!--  由log4jdbc配置输出具体的sql信息
+          jdbc.sqlonly     : 记录系统执行过的sql语句
+　　      jdbc.sqltiming  : 记录sql执行的时间，可以分析耗时的sql语句
+　　      jdbc.audit        : 记录除了ResultSet外的所有JDBC调用情况。一般不需要。
+　        jdbc.resultset   : 记录返回结果集信息
+    　　   jdbc.yiqi.com.connection: 记录数据库连接和释放信息，可记录当前的数据库连接数，便于诊断连接是否释放。
+    -->
+    <logger name="jdbc.sqlonly" additivity="true">
+        <level value="INFO"/>
+    </logger>
+    <logger name="jdbc.sqltiming" additivity="true">
+        <level value="ERROR"/>
+    </logger>
+
+    <logger name="jdbc.resultsettable" additivity="true">
+        <level value="ERROR"/>
+    </logger>
+
+    <logger name="jdbc.resultset" additivity="true">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="jdbc.yiqi.com.connection" additivity="true">
+        <level value="ERROR"/>
+    </logger>
+    <logger name="jdbc.audit" additivity="true">
+        <level value="WARN"/>
+    </logger>
+
+
+    <!-- 根logger的设置-->
+    <root>
+        <!--优先级设置，假设设置为“info”，则无法输出debug级别的日志-->
+        <priority value="warn"/>
+        <appender-ref ref="ConsoleOutput"/>
+        <appender-ref ref="myFile"/>
+    </root>
+</log4j:configuration>
